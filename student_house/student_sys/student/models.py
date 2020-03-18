@@ -2,10 +2,14 @@ from django.db import models
 
 # Create your models here.
 class Student(models.Model):
+    @classmethod
+    def get_all(cls):
+        return cls.objects.all()
+
     SEX_ITEMS=[
-        (1,'男')，
-        (2,'女')，
-        (0,'未知')，
+        (1,'男'),
+        (2,'女'),
+        (0,'未知'),
     ]
 
     STATUS_ITEMS=[
@@ -24,8 +28,8 @@ class Student(models.Model):
 
     created_time=models.DateTimeField(auto_now_add=True,editable=False,verbose_name="创建时间")
 
-    def __str__(slef):
-        return '<Student: {}>'.format(slef.name)
+    def __str__(self):
+        return '<Student: {}>'.format(self.name)
     
     class Meta:
         verbose_name=verbose_name_plural="学员信息"
