@@ -36,4 +36,4 @@ class Student(models.Model):
 
     @property
     def sex_show(self):
-        return dict(slef.SEX_ITEMS)[self.sex]
+        return dict(self.SEX_ITEMS)[self.sex]

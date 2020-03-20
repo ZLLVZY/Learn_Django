@@ -15,7 +15,7 @@ class StudentTestCase(TestCase):
                 )
     
     def test_create_and_sex_show(self):
-        Student.objects.create(
+        student=Student.objects.create(
                 name='ZY',
                 sex=2,
                 email='zy@123456.com',
@@ -35,11 +35,11 @@ class StudentTestCase(TestCase):
                 phone='13579',
                 )
         name='ZY'
-        students=Students.objects.filter(name=name)
+        students=Student.objects.filter(name=name)
         self.assertEqual(students.count(),1,'应该只存在一个名称为{}的记录'.format(name))
 
     def test_get_index(self):
-        clinet=Client()
+        client=Client()
         response=client.get('/')
         self.assertEqual(response.status_code,200,'status code must be 200!')
 
