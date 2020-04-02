@@ -22,7 +22,7 @@ class Link(models.Model):
     class Meta:
         verbose_name=verbose_name_plural="友链"
 
-class SlideBar(models.Model):
+class SideBar(models.Model):
     STATUS_SHOW=1
     STATUS_HIDE=0
     STATUS_ITEMS=(
