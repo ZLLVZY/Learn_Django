@@ -17,16 +17,21 @@ from django.contrib import admin
 from django.urls import path
 from .custom_site import custom_site
 
-from blog.views import post_list,post_detail
+#from blog.views import post_list,post_detail  function view
+from blog.views import (
+        IndexView,CategoryView,TagView,
+        PostDetailView,
+        )
+
 from config.views import links
 
 
 urlpatterns = [
-    path('super_admin/', admin.site.urls),
-    path('admin/', custom_site.urls),
-    path('',post_list),
-    path('category/<int:category_id>/',post_list),
-    path('tag/<int:tag_id>/',post_list),
-    path('post/<int:post_id>.html',post_detail),
-    path('links',links),
+    path('super_admin/', admin.site.urls,name='super-admin'),
+    path('admin/', custom_site.urls,name='admin'),
+    path('',IndexView.as_view(),name='index'),
+    path('category/<int:category_id>/',CategoryView.as_view(),name='category-list'),
+    path('tag/<int:tag_id>/',TagView.as_view(),name='tag-list'),
+    path('post/<int:post_id>.html',PostDetailView.as_view(),name='post-detail'),
+    path('links',links,name='links'),
 ]
