@@ -48,7 +48,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 class PostAdmin(BaseOwnerAdmin):
     list_display=[
         'title','category','status',
-        'created_time','owner','operator'
+        'created_time','owner','pv','operator'
     ]
     form=PostAdminForm
     list_display_links=[]
