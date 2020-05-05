@@ -8,12 +8,17 @@ from .models import Post,Category,Tag
 from typeidea.base_admin import BaseOwnerAdmin
 from django.contrib.admin.models import LogEntry
 # Register your models here.
+
+admin.site.site_header='Typeidea'
+admin.site.site_title='Typeidea管理后台'
+admin.site.index_title='首页'
+
 class PostInline(admin.TabularInline):
     fields=('title','desc')
     extra=1
     model=Post
 
-@admin.register(Category,site=custom_site)
+@admin.register(Category)
 class CategoryAdmin(BaseOwnerAdmin):
     list_display=('name','status','is_nav','created_time','post_count')
     fields=('name','status','is_nav')
@@ -25,7 +30,7 @@ class CategoryAdmin(BaseOwnerAdmin):
     post_count.short_description='文章数量'
 
 
-@admin.register(Tag,site=custom_site)
+@admin.register(Tag)
 class TagAdmin(BaseOwnerAdmin):
     list_display=('name','status','created_time')
     fields=('name','status')
@@ -44,7 +49,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
             return queryset.filter(category_id=self.value())
         return queryset
 
-@admin.register(Post,site=custom_site)
+@admin.register(Post)
 class PostAdmin(BaseOwnerAdmin):
     list_display=[
         'title','category','status',
@@ -94,7 +99,7 @@ class PostAdmin(BaseOwnerAdmin):
     def operator(self,obj):
         return format_html(
             '<a href="{}">编辑</a>',
-            reverse('cus_admin:blog_post_change',args=(obj.id,))
+            reverse('admin:blog_post_change',args=(obj.id,))
         )
 
     operator.short_description="操作"
@@ -107,7 +112,7 @@ class PostAdmin(BaseOwnerAdmin):
         js=('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js',)
 '''
 
-@admin.register(LogEntry,site=custom_site)
+@admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
     """docstring for LogEntryAdmin"""
     list_display=['object_repr','object_id','action_flag','user',

@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'typeidea',
     'blog',
     'config',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+SIMPLEUI_ANALYSIS = False
 
 MIDDLEWARE = [
     'blog.middleware.user_id.UserIDMiddleware',
