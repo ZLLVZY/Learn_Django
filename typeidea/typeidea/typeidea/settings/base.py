@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'simpleui',
+    'rest_framework',
     'typeidea',
     'blog',
     'config',
@@ -44,6 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 SIMPLEUI_ANALYSIS = False
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':2,
+    "DEFAULT_SCHEMA_CLASS":"rest_framework.schemas.AutoSchema",
+}
 
 MIDDLEWARE = [
     'blog.middleware.user_id.UserIDMiddleware',

@@ -14,9 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from .custom_site import custom_site
 from django.contrib.sitemaps import views as sitemap_views
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
@@ -31,7 +33,18 @@ from blog.views import (
 
 from config.views import LinkListView
 from comment.views import CommentView
+from blog.apis import PostViewSet,CategoryViewSet,TagViewSet,UserViewSet
+from comment.apis import CommentViewSet
+from config.apis import LinkViewSet,SideBarViewSet
 
+router=DefaultRouter()
+router.register('post',PostViewSet,basename='api-post')
+router.register('category',CategoryViewSet,basename='api-category')
+router.register('tag',TagViewSet,basename='api-tag')
+router.register('author',UserViewSet,basename='api-author')
+router.register('comment',CommentViewSet,basename='api-comment')
+router.register('link',LinkViewSet,basename='api-link')
+router.register('sidebar',SideBarViewSet,basename='api-sidebar')
 
 urlpatterns = [
     #path('super_admin/', admin.site.urls,name='super-admin'),
@@ -46,4 +59,6 @@ urlpatterns = [
     path('comment/',CommentView.as_view(),name='comment'),
     path('rss',LatestPostFeed(),name='rss'),
     path('sitemap.xml',sitemap_views.sitemap,{'sitemaps':{'posts':PostSitemap}}),
+    path('api/',include(router.urls),name='api'),
+    path('api/docs/',include_docs_urls(title='typeidea apis')),
 ]
