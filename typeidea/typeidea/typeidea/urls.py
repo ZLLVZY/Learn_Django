@@ -22,6 +22,7 @@ from rest_framework.documentation import include_docs_urls
 
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+from typeidea.settings import develop
 
 #from blog.views import post_list,post_detail  function view
 from blog.views import (
@@ -62,3 +63,9 @@ urlpatterns = [
     path('api/',include(router.urls),name='api'),
     path('api/docs/',include_docs_urls(title='typeidea apis')),
 ]
+
+if develop.DEBUG:
+    import debug_toolbar
+    urlpatterns=[
+        path('__debug__',include(debug_toolbar.urls)),
+    ]+urlpatterns
