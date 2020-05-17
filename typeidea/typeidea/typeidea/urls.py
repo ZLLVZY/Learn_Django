@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.views.decorators.cache import cache_page
 from .custom_site import custom_site
 from django.contrib.sitemaps import views as sitemap_views
 from rest_framework.routers import DefaultRouter
@@ -59,7 +60,7 @@ urlpatterns = [
     path('links',LinkListView.as_view(),name='links'),
     path('comment/',CommentView.as_view(),name='comment'),
     path('rss',LatestPostFeed(),name='rss'),
-    path('sitemap.xml',sitemap_views.sitemap,{'sitemaps':{'posts':PostSitemap}}),
+    path('sitemap.xml',cache_page(60*20,key_prefix='sitemap_cache_')(sitemap_views.sitemap),{'sitemaps':{'posts':PostSitemap}}),
     path('api/',include(router.urls),name='api'),
     path('api/docs/',include_docs_urls(title='typeidea apis')),
 ]

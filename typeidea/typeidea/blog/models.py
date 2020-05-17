@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib import admin
 from django.utils.functional import cached_property
 import mistune
+from django.core.cache import cache
 
 # Create your models here.
 class Category(models.Model):
@@ -124,7 +125,11 @@ class Post(models.Model):
 
     @classmethod
     def hot_posts(cls):
-        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')
+        result=cache.get('hot_posts')
+        if not result:
+            result = cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')
+            cache.set('hot_post',result,10*60)
+        return result
 
     def save(self,*args,**kwargs):
         self.content_html=mistune.markdown(self.content)
