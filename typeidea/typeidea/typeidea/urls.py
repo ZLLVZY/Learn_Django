@@ -14,11 +14,60 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
+from django.views.decorators.cache import cache_page
 from .custom_site import custom_site
+from django.contrib.sitemaps import views as sitemap_views
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
+from blog.rss import LatestPostFeed
+from blog.sitemap import PostSitemap
+from django.conf import settings
+from django.conf.urls.static import static
+
+#from blog.views import post_list,post_detail  function view
+from blog.views import (
+        IndexView,CategoryView,TagView,
+        PostDetailView,
+        SearchView,
+        AuthorView,
+        )
+
+from config.views import LinkListView
+from comment.views import CommentView
+from blog.apis import PostViewSet,CategoryViewSet,TagViewSet,UserViewSet
+from comment.apis import CommentViewSet
+from config.apis import LinkViewSet,SideBarViewSet
+
+router=DefaultRouter()
+router.register('post',PostViewSet,basename='api-post')
+router.register('category',CategoryViewSet,basename='api-category')
+router.register('tag',TagViewSet,basename='api-tag')
+router.register('author',UserViewSet,basename='api-author')
+router.register('comment',CommentViewSet,basename='api-comment')
+router.register('link',LinkViewSet,basename='api-link')
+router.register('sidebar',SideBarViewSet,basename='api-sidebar')
 
 urlpatterns = [
-    path('super_admin/', admin.site.urls),
-    path('admin/', custom_site.urls),
-]
+    #path('super_admin/', admin.site.urls,name='super-admin'),
+    path('admin/',admin.site.urls,name='admin'),
+    path('',IndexView.as_view(),name='index'),
+    path('category/<int:category_id>/',CategoryView.as_view(),name='category-list'),
+    path('tag/<int:tag_id>/',TagView.as_view(),name='tag-list'),
+    path('post/<int:post_id>.html',PostDetailView.as_view(),name='post-detail'),
+    path('search/',SearchView.as_view(),name='search'),
+    path('author/<int:owner_id>',AuthorView.as_view(),name='author'),
+    path('links',LinkListView.as_view(),name='links'),
+    path('comment/',CommentView.as_view(),name='comment'),
+    path('rss',LatestPostFeed(),name='rss'),
+    path('sitemap.xml',cache_page(60*20,key_prefix='sitemap_cache_')(sitemap_views.sitemap),{'sitemaps':{'posts':PostSitemap}}),
+    path('api/',include(router.urls),name='api'),
+    path('api/docs/',include_docs_urls(title='typeidea apis')),
+]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns=[
+        path('__debug__',include(debug_toolbar.urls)),
+    ]+urlpatterns

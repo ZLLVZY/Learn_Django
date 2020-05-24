@@ -30,6 +30,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
+    'rest_framework',
+    'typeidea',
     'blog',
     'config',
     'comment',
@@ -41,8 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+SIMPLEUI_ANALYSIS = False
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':2,
+    "DEFAULT_SCHEMA_CLASS":"rest_framework.schemas.AutoSchema",
+}
 
 MIDDLEWARE = [
+    'blog.middleware.user_id.UserIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,10 +64,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'typeidea.urls'
 
+THEME='bootstrap'
+#STATIC_ROOT='/home/typeidea/typeidea/typeidea/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS=[
+        os.path.join(BASE_DIR,'themes',THEME,"static"),
+        ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'themes',THEME,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,4 +133,3 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
