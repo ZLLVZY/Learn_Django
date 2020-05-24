@@ -2,8 +2,6 @@ from .base import *
 
 DEBUG=False
 
-ALLOWED_HOST=['the5fire.com']
-
 DATABASES={
         'default':{
             'ENGINE':'django.db.backends.mysql',
@@ -18,6 +16,7 @@ DATABASES={
         }
 
 REDIS_URL='redis://172.17.0.4:6379'
+
 CACHES={
         'default':{
             'BACKEND':'django_redis.cache.RedisCache',
@@ -31,3 +30,4 @@ CACHES={
             'CONNECTION_POOL_CLASS':'redis.connection.BlockingConnectionPool',
             }
         }
+

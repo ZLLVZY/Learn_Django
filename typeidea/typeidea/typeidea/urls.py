@@ -23,7 +23,8 @@ from rest_framework.documentation import include_docs_urls
 
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
-from typeidea.settings import develop
+from django.conf import settings
+from django.conf.urls.static import static
 
 #from blog.views import post_list,post_detail  function view
 from blog.views import (
@@ -63,9 +64,9 @@ urlpatterns = [
     path('sitemap.xml',cache_page(60*20,key_prefix='sitemap_cache_')(sitemap_views.sitemap),{'sitemaps':{'posts':PostSitemap}}),
     path('api/',include(router.urls),name='api'),
     path('api/docs/',include_docs_urls(title='typeidea apis')),
-]
+]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-if develop.DEBUG:
+if settings.DEBUG:
     import debug_toolbar
     urlpatterns=[
         path('__debug__',include(debug_toolbar.urls)),
